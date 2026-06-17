@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command Center Dashboard | UrbanRisk AI</title>
+  <link rel="stylesheet" href="css/commander-dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <div class="command-shell">
+    <aside class="command-sidebar">
+      <div class="brand">
+        <div class="brand-mark"><i class="fa-solid fa-staff-snake"></i></div>
+        <div>
+          <h1>UrbanRisk AI</h1>
+          <span>Command Center</span>
+        </div>
+      </div>
+
+      <nav class="side-nav" aria-label="Command navigation">
+        <a class="active" href="#"><i class="fa-solid fa-house"></i>Dashboard</a>
+        <a href="#map"><i class="fa-solid fa-crosshairs"></i>Live Incidents</a>
+        <a href="#responders"><i class="fa-solid fa-people-group"></i>Responders</a>
+        <a href="#tracking"><i class="fa-solid fa-route"></i>Unit Tracking</a>
+        <a href="#alerts"><i class="fa-solid fa-bell"></i>Alerts & Notifications <b id="navAlertCount">0</b></a>
+        <a href="#reports"><i class="fa-solid fa-file-lines"></i>Situation Reports</a>
+        <a href="#resources"><i class="fa-solid fa-truck-medical"></i>Resource Management</a>
+        <a href="#communications"><i class="fa-solid fa-headset"></i>Communications</a>
+        <a href="#analytics"><i class="fa-solid fa-chart-simple"></i>Analytics</a>
+        <a href="#logs"><i class="fa-solid fa-clock-rotate-left"></i>History Logs</a>
+        <a href="#settings"><i class="fa-solid fa-gear"></i>System Settings</a>
+      </nav>
+
+      <section class="quick-actions">
+        <h2>Quick Actions</h2>
+        <button type="button" class="action danger"><i class="fa-regular fa-bell"></i>Create Alert</button>
+        <button type="button" class="action primary"><i class="fa-solid fa-bullhorn"></i>Broadcast Message</button>
+        <button type="button" class="action success"><i class="fa-solid fa-truck-medical"></i>Request Resources</button>
+      </section>
+
+      <section class="active-status">
+        <h2>Active Status</h2>
+        <strong>Command Center Operational</strong>
+        <span>All Systems Normal</span>
+        <div class="mini-wave"></div>
+      </section>
+    </aside>
+
+    <main class="command-main">
+      <header class="topbar">
+        <div>
+          <h1>Command Center Dashboard</h1>
+          <p>Real-time Operations Overview</p>
+        </div>
+        <div class="top-actions">
+          <div class="system-pill"><i></i>System Online</div>
+          <button class="icon-btn" type="button" data-count="7" aria-label="Notifications"><i class="fa-solid fa-bell"></i></button>
+          <button class="icon-btn" type="button" data-count="3" aria-label="Messages"><i class="fa-solid fa-message"></i></button>
+          <div class="commander-card">
+            <div>
+              <strong id="commanderName">Cmdr. Commander</strong>
+              <span>Command Center</span>
+            </div>
+            <div class="portrait"><i class="fa-solid fa-user-tie"></i></div>
+          </div>
+        </div>
+      </header>
+
+      <section class="metric-grid" aria-label="Operations metrics">
+        <article class="metric critical">
+          <div class="metric-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <span>Critical Incidents</span>
+            <strong id="criticalIncidents">0</strong>
+            <em>+3 from last hour</em>
+          </div>
+          <div class="spark"></div>
+        </article>
+        <article class="metric active">
+          <div class="metric-icon"><i class="fa-solid fa-fire-flame-curved"></i></div>
+          <div>
+            <span>Active Incidents</span>
+            <strong id="activeIncidents">0</strong>
+            <em>+5 from last hour</em>
+          </div>
+          <div class="spark"></div>
+        </article>
+        <article class="metric responders">
+          <div class="metric-icon"><i class="fa-solid fa-user-shield"></i></div>
+          <div>
+            <span>Responders Online</span>
+            <strong id="respondersOnline">0</strong>
+            <em id="respondersPercent">0% of total</em>
+          </div>
+          <div class="spark"></div>
+        </article>
+        <article class="metric units">
+          <div class="metric-icon"><i class="fa-solid fa-truck-medical"></i></div>
+          <div>
+            <span>Units Deployed</span>
+            <strong id="unitsDeployed">0</strong>
+            <em id="unitsPercent">0% of total units</em>
+          </div>
+          <div class="spark"></div>
+        </article>
+        <article class="metric resolved">
+          <div class="metric-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <div>
+            <span>Resolved Today</span>
+            <strong id="resolvedToday">0</strong>
+            <em>+6 from yesterday</em>
+          </div>
+          <div class="spark"></div>
+        </article>
+      </section>
+
+      <div class="content-grid">
+        <section class="left-stack">
+          <article class="panel map-panel" id="map">
+            <div class="panel-heading">
+              <div>
+                <h2>Live Incident Map</h2>
+                <span class="live-dot"><i></i>Live Updates</span>
+              </div>
+              <div class="map-tools">
+                <button type="button" class="selected">Map</button>
+                <button type="button">Satellite</button>
+                <button type="button" aria-label="Fullscreen"><i class="fa-solid fa-expand"></i></button>
+              </div>
+            </div>
+            <div class="command-map">
+              <button class="map-control zoom-in" type="button">+</button>
+              <button class="map-control zoom-out" type="button">-</button>
+              <button class="map-control locate" type="button"><i class="fa-solid fa-location-crosshairs"></i></button>
+              <span class="map-label" style="--x:13%;--y:30%">Barangay 1</span>
+              <span class="map-label" style="--x:54%;--y:14%">San Rafael</span>
+              <span class="map-label" style="--x:70%;--y:25%">San Bricta</span>
+              <span class="map-label" style="--x:35%;--y:72%">South Park</span>
+              <span class="pin critical" style="--x:28%;--y:18%"><i class="fa-solid fa-triangle-exclamation"></i></span>
+              <span class="pin critical" style="--x:58%;--y:31%"><i class="fa-solid fa-fire-extinguisher"></i></span>
+              <span class="pin critical" style="--x:78%;--y:52%"><i class="fa-solid fa-triangle-exclamation"></i></span>
+              <span class="pin high" style="--x:45%;--y:68%"><i class="fa-solid fa-fire-flame-curved"></i></span>
+              <span class="pin high" style="--x:65%;--y:51%"><i class="fa-solid fa-fire-flame-curved"></i></span>
+              <span class="pin high" style="--x:75%;--y:29%"><i class="fa-solid fa-fire-flame-curved"></i></span>
+              <span class="pin medium" style="--x:25%;--y:50%"><i class="fa-solid fa-droplet"></i></span>
+              <span class="pin low" style="--x:31%;--y:60%"><i class="fa-solid fa-briefcase-medical"></i></span>
+              <span class="pin low" style="--x:68%;--y:36%"><i class="fa-solid fa-briefcase-medical"></i></span>
+              <span class="pin low" style="--x:90%;--y:40%"><i class="fa-solid fa-briefcase-medical"></i></span>
+              <span class="pin unit main-unit" style="--x:48%;--y:54%"><i class="fa-solid fa-people-arrows"></i></span>
+              <span class="pin unit" style="--x:46%;--y:38%"><i class="fa-solid fa-car-side"></i></span>
+              <span class="pin unit" style="--x:83%;--y:19%"><i class="fa-solid fa-car-side"></i></span>
+              <span class="pin unit" style="--x:74%;--y:70%"><i class="fa-solid fa-car-side"></i></span>
+              <div class="map-legend">
+                <span><i class="critical"></i>Critical</span>
+                <span><i class="high"></i>High</span>
+                <span><i class="medium"></i>Medium</span>
+                <span><i class="low"></i>Low</span>
+                <span><i class="unit"></i>Unit</span>
+              </div>
+            </div>
+          </article>
+
+          <div class="lower-grid">
+            <article class="panel" id="responders">
+              <div class="panel-heading compact">
+                <h2>Responder Deployment Status</h2>
+                <a href="#">View All Units</a>
+              </div>
+              <div class="responder-list" id="responderList"></div>
+            </article>
+
+            <article class="panel" id="resources">
+              <div class="panel-heading compact">
+                <h2>Resource Availability</h2>
+                <a href="#">View All Resources</a>
+              </div>
+              <div class="resource-list" id="resourceList"></div>
+            </article>
+          </div>
+        </section>
+
+        <aside class="right-stack">
+          <article class="panel overview-panel" id="analytics">
+            <h2>Incidents Overview</h2>
+            <div class="overview-body">
+              <div class="donut"><strong id="overviewTotal">0</strong><span>Total</span></div>
+              <div class="overview-list" id="overviewList"></div>
+            </div>
+          </article>
+
+          <article class="panel alerts-panel" id="alerts">
+            <div class="panel-heading compact">
+              <h2>Active Alerts</h2>
+              <a href="#">View All</a>
+            </div>
+            <div class="alert-list" id="alertList"></div>
+          </article>
+
+          <article class="panel report-panel" id="reports">
+            <div class="panel-heading compact">
+              <h2>Latest Situation Report</h2>
+              <a href="#">View All</a>
+            </div>
+            <div class="report-card">
+              <div>
+                <h3 id="reportTitle">Situation Report #2026-0611-001</h3>
+                <span id="reportTime">Time Issued: June 11, 2026 - 10:30 AM</span>
+              </div>
+              <strong>Active</strong>
+              <p id="reportSummary">Multiple incidents reported across Central District. All units are responding.</p>
+            </div>
+            <button class="report-btn" type="button"><i class="fa-solid fa-file-circle-plus"></i>Generate New Report</button>
+          </article>
+        </aside>
+      </div>
+
+      <footer class="status-footer">
+        <div><i class="fa-solid fa-circle-check"></i><span>Operation Status</span><strong>All Systems Operational</strong></div>
+        <div><i class="fa-solid fa-cloud-showers-heavy"></i><span>Weather Conditions</span><strong>28°C Rainy</strong></div>
+        <div><span>System Uptime</span><strong>99.9%</strong></div>
+        <div><span>Last Update</span><strong id="lastUpdate">--:--</strong><em id="lastUpdateDate">--</em></div>
+        <div><i class="fa-solid fa-tower-broadcast"></i><span>Connected Units</span><strong id="connectedUnits">0</strong></div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/commander-dashboard.js"></script>
+</body>
+</html>

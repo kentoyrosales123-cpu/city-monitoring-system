@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | UrbanRisk AI</title>
+  <link rel="stylesheet" href="css/admin-dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <h2>UrbanRisk AI</h2>
+          <p>Admin Console</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Admin navigation">
+        <a href="#" class="active"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+        <a href="/admin-personnel.html"><i class="fa-solid fa-user-group"></i><span>Personnel</span></a>
+        <a href="#agencies"><i class="fa-solid fa-building-shield"></i><span>Agencies</span></a>
+        <a href="#monitoring"><i class="fa-solid fa-location-crosshairs"></i><span>Monitoring</span></a>
+        <a href="#incidents"><i class="fa-solid fa-triangle-exclamation"></i><span>Incidents</span></a>
+        <a href="#reports"><i class="fa-solid fa-clipboard-list"></i><span>Reports</span></a>
+        <a href="#analytics"><i class="fa-solid fa-chart-column"></i><span>Analytics</span></a>
+        <a href="#logs"><i class="fa-solid fa-server"></i><span>System Logs</span></a>
+        <a href="#settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-profile">
+        <div class="profile-row">
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <div>
+            <strong id="adminName">Admin User</strong>
+            <span id="adminRole">System Administrator</span>
+          </div>
+        </div>
+        <div class="online-status"><span></span>Online</div>
+        <button class="logout-btn" id="logoutBtn" type="button">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" type="button" aria-label="Open menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="welcome-copy">
+          <h1>Welcome back, Admin!</h1>
+          <p>Smart Monitoring Infrastructure - Phase 1</p>
+        </div>
+        <div class="topbar-actions">
+          <div class="date-card">
+            <i class="fa-regular fa-calendar-days"></i>
+            <div>
+              <strong id="currentDate">June 11, 2026</strong>
+              <span id="currentTime">Thursday, 10:30 AM</span>
+            </div>
+          </div>
+          <button class="icon-btn alert-dot" type="button" aria-label="Notifications" data-count="5">
+            <i class="fa-regular fa-bell"></i>
+          </button>
+          <button class="icon-btn alert-dot" type="button" aria-label="Messages" data-count="2">
+            <i class="fa-regular fa-envelope"></i>
+          </button>
+          <div class="top-avatar"><i class="fa-solid fa-user"></i></div>
+        </div>
+      </header>
+
+      <section class="kpi-grid" aria-label="Operations summary">
+        <article class="kpi-card cyan">
+          <div class="kpi-icon"><i class="fa-solid fa-users"></i></div>
+          <div>
+            <p>Total Personnel</p>
+            <strong id="totalUsers">0</strong>
+            <span class="trend positive">+12 this week</span>
+          </div>
+          <div class="sparkline"></div>
+        </article>
+        <article class="kpi-card green">
+          <div class="kpi-icon"><i class="fa-solid fa-building-columns"></i></div>
+          <div>
+            <p>Registered Agencies</p>
+            <strong id="totalAgencies">0</strong>
+            <span class="trend positive">+2 this month</span>
+          </div>
+          <div class="sparkline"></div>
+        </article>
+        <article class="kpi-card amber">
+          <div class="kpi-icon"><i class="fa-solid fa-user-shield"></i></div>
+          <div>
+            <p>Live Responders</p>
+            <strong id="liveResponders">0</strong>
+            <span>Currently active</span>
+          </div>
+          <div class="sparkline"></div>
+        </article>
+        <article class="kpi-card red">
+          <div class="kpi-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <p>Total Incidents</p>
+            <strong id="totalIncidents">0</strong>
+            <span>+18 this week</span>
+          </div>
+          <div class="sparkline"></div>
+        </article>
+      </section>
+
+      <div class="dashboard-grid">
+        <section class="main-column">
+          <article class="panel map-panel" id="monitoring">
+            <div class="panel-header">
+              <h2>Live Incident Map</h2>
+              <button class="ghost-btn" type="button"><i class="fa-regular fa-map"></i>View Full Map</button>
+            </div>
+            <div class="incident-map" aria-label="Live incident map visualization">
+              <div class="map-roads"></div>
+              <div class="map-legend">
+                <span><i class="critical"></i>Critical</span>
+                <span><i class="high"></i>High</span>
+                <span><i class="medium"></i>Medium</span>
+                <span><i class="low"></i>Low</span>
+                <span><i class="unit"></i>Responder Unit</span>
+              </div>
+              <span class="map-pin critical" style="--x:36%;--y:20%"><i class="fa-solid fa-car-burst"></i></span>
+              <span class="map-pin critical" style="--x:56%;--y:26%"><i class="fa-solid fa-fire-flame-curved"></i></span>
+              <span class="map-pin high" style="--x:44%;--y:42%"><i class="fa-solid fa-car"></i></span>
+              <span class="map-pin high" style="--x:76%;--y:49%"><i class="fa-solid fa-person-biking"></i></span>
+              <span class="map-pin high" style="--x:86%;--y:16%"><i class="fa-solid fa-house-fire"></i></span>
+              <span class="map-pin medium" style="--x:28%;--y:37%"><i class="fa-solid fa-star-of-life"></i></span>
+              <span class="map-pin low" style="--x:56%;--y:56%"><i class="fa-solid fa-water"></i></span>
+              <span class="map-pin unit" style="--x:40%;--y:44%"><i class="fa-solid fa-car-side"></i></span>
+              <span class="map-pin unit" style="--x:71%;--y:63%"><i class="fa-solid fa-truck-medical"></i></span>
+              <span class="map-pin unit" style="--x:87%;--y:58%"><i class="fa-solid fa-person-military-pointing"></i></span>
+              <span class="map-pin low" style="--x:36%;--y:73%"><i class="fa-solid fa-ship"></i></span>
+            </div>
+          </article>
+
+          <article class="panel" id="incidents">
+            <div class="panel-header">
+              <h2>Recent Incidents</h2>
+              <button class="ghost-btn" type="button">View All</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Location</th>
+                    <th>Severity</th>
+                    <th>Status</th>
+                    <th>Reported At</th>
+                  </tr>
+                </thead>
+                <tbody id="incidentsTable">
+                  <tr><td colspan="7">Loading incidents...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel" id="personnel">
+            <div class="panel-header">
+              <h2>Active Units</h2>
+              <button class="ghost-btn" type="button">View All Units</button>
+            </div>
+            <div class="unit-grid">
+              <div class="unit-card police"><i class="fa-solid fa-shield-heart"></i><div><strong>Police Unit 1</strong><b id="policeCount">0</b><span>Personnel</span><em>On Duty</em></div></div>
+              <div class="unit-card fire"><i class="fa-solid fa-fire-flame-curved"></i><div><strong>Fire Brigade 2</strong><b id="fireCount">0</b><span>Personnel</span><em>On Duty</em></div></div>
+              <div class="unit-card medical"><i class="fa-solid fa-briefcase-medical"></i><div><strong>Medical Team 3</strong><b id="medicalCount">0</b><span>Personnel</span><em>On Duty</em></div></div>
+              <div class="unit-card drrm"><i class="fa-solid fa-hands-holding-circle"></i><div><strong>DRRM Team</strong><b id="drrmCount">0</b><span>Personnel</span><em>On Duty</em></div></div>
+            </div>
+          </article>
+        </section>
+
+        <aside class="side-column">
+          <article class="panel chart-panel">
+            <h2>Incidents by Type</h2>
+            <div class="donut-row">
+              <div class="donut incidents-donut"><strong id="donutTotal">0</strong><span>Total</span></div>
+              <div class="chart-list" id="incidentTypeList"></div>
+            </div>
+          </article>
+
+          <article class="panel chart-panel">
+            <h2>Response Status</h2>
+            <div class="donut-row">
+              <div class="donut status-donut"><strong id="resolvedPercent">0%</strong><span>Resolved</span></div>
+              <div class="chart-list" id="statusList"></div>
+            </div>
+          </article>
+
+          <article class="panel health-panel" id="agencies">
+            <h2>System Health</h2>
+            <div class="health-list">
+              <div><span>GPS Tracking System</span><strong>Operational</strong></div>
+              <div><span>Risk Analysis Engine</span><strong>Operational</strong></div>
+              <div><span>Notification System</span><strong>Operational</strong></div>
+              <div><span>Database</span><strong>Operational</strong></div>
+              <div><span>Communication Hub</span><strong>Operational</strong></div>
+            </div>
+          </article>
+        </aside>
+      </div>
+
+      <section class="panel create-panel">
+        <div class="panel-header">
+          <h2>Create Personnel</h2>
+        </div>
+        <form id="createUserForm" class="form-grid">
+          <input type="text" id="name" placeholder="Full Name" required />
+          <input type="email" id="email" placeholder="Email" required />
+          <input type="password" id="password" placeholder="Password" required />
+          <select id="role" required>
+            <option value="">Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="commander">Commander</option>
+            <option value="police">Police</option>
+            <option value="fire">Fire</option>
+            <option value="medical">Medical</option>
+            <option value="drrm">DRRM</option>
+            <option value="barangay">Barangay</option>
+            <option value="responder">Responder</option>
+          </select>
+          <input type="text" id="rank" placeholder="Rank / Position" />
+          <input type="text" id="unit" placeholder="Unit / Team" />
+          <select id="status">
+            <option value="active">Active</option>
+            <option value="on_duty">On Duty</option>
+            <option value="off_duty">Off Duty</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <button type="submit" class="btn-primary">Create Personnel</button>
+          <p id="userMessage" class="message"></p>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/admin-dashboard.js"></script>
+</body>
+</html>

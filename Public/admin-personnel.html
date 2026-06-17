@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personnel Management | UrbanRisk AI</title>
+  <link rel="stylesheet" href="css/admin-dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <h2>UrbanRisk AI</h2>
+          <p>Admin Console</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Admin navigation">
+        <a href="/admin-dashboard.html"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+        <a href="/admin-personnel.html" class="active"><i class="fa-solid fa-user-group"></i><span>Personnel</span></a>
+        <a href="/admin-dashboard.html#agencies"><i class="fa-solid fa-building-shield"></i><span>Agencies</span></a>
+        <a href="/admin-dashboard.html#monitoring"><i class="fa-solid fa-location-crosshairs"></i><span>Monitoring</span></a>
+        <a href="/admin-dashboard.html#incidents"><i class="fa-solid fa-triangle-exclamation"></i><span>Incidents</span></a>
+        <a href="/admin-dashboard.html#reports"><i class="fa-solid fa-clipboard-list"></i><span>Reports</span></a>
+        <a href="/admin-dashboard.html#analytics"><i class="fa-solid fa-chart-column"></i><span>Analytics</span></a>
+        <a href="/admin-dashboard.html#logs"><i class="fa-solid fa-server"></i><span>System Logs</span></a>
+        <a href="/admin-dashboard.html#settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-profile">
+        <div class="profile-row">
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <div>
+            <strong id="adminName">Admin User</strong>
+            <span id="adminRole">System Administrator</span>
+          </div>
+        </div>
+        <div class="online-status"><span></span>Online</div>
+        <button class="logout-btn" id="logoutBtn" type="button">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="welcome-copy">
+          <h1>Personnel Management</h1>
+          <p>Monitor, activate, deactivate, and manage all system users.</p>
+        </div>
+      </header>
+
+      <section class="kpi-grid">
+        <article class="kpi-card cyan">
+          <p>Total Personnel</p>
+          <strong id="totalUsers">0</strong>
+        </article>
+
+        <article class="kpi-card green">
+          <p>Active Users</p>
+          <strong id="activeUsers">0</strong>
+        </article>
+
+        <article class="kpi-card amber">
+          <p>On Duty</p>
+          <strong id="onDutyUsers">0</strong>
+        </article>
+
+        <article class="kpi-card red">
+          <p>Inactive Users</p>
+          <strong id="inactiveUsers">0</strong>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Personnel List</h2>
+          <input type="text" id="searchInput" placeholder="Search name, role, unit..." />
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Rank</th>
+                <th>Unit</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="usersTable">
+              <tr><td colspan="7">Loading personnel...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/admin-personnel.js"></script>
+</body>
+</html>

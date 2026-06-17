@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responder Dashboard | AgilaCom</title>
+  <link rel="stylesheet" href="css/responder-dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <div class="responder-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+        <div>
+          <span>Responder System</span>
+        </div>
+      </div>
+
+      <section class="profile-card">
+        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+        <div>
+          <strong id="responderName">Responder</strong>
+          <span id="responderRole">Police Responder</span>
+          <em><i></i>On Duty</em>
+        </div>
+      </section>
+
+      <nav class="side-nav" aria-label="Responder navigation">
+        <small>Navigation</small>
+        <a class="active" href="#"><i class="fa-solid fa-house"></i>Dashboard</a>
+        <a href="#missions"><i class="fa-regular fa-clipboard"></i>My Missions</a>
+        <a href="#incidents"><i class="fa-solid fa-triangle-exclamation"></i>Active Incidents <b id="navIncidentCount">0</b></a>
+        <a href="#messages"><i class="fa-regular fa-comment"></i>Messages</a>
+        <a href="#location"><i class="fa-solid fa-crosshairs"></i>My Location</a>
+        <a href="#availability"><i class="fa-solid fa-user-clock"></i>Availability</a>
+        <a href="#reports"><i class="fa-regular fa-file-lines"></i>Reports</a>
+        <a href="#profile"><i class="fa-regular fa-user"></i>Profile</a>
+        <a href="#settings"><i class="fa-solid fa-gear"></i>Settings</a>
+        <button id="logoutBtn" type="button"><i class="fa-solid fa-power-off"></i>Logout</button>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="title-row">
+          <button class="menu-btn" type="button" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+          <h1>Responder Dashboard</h1>
+        </div>
+        <div class="top-actions">
+          <span class="online-pill"><i></i>Online</span>
+          <button class="icon-btn" type="button" data-count="3" aria-label="Notifications"><i class="fa-regular fa-bell"></i></button>
+          <div class="top-profile">
+            <div class="small-avatar"><i class="fa-solid fa-user"></i></div>
+            <div>
+              <strong id="topResponderName">Responder</strong>
+              <span id="topResponderRole">Police Responder</span>
+            </div>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+        </div>
+      </header>
+
+      <section class="kpi-grid" aria-label="Responder summary">
+        <article class="kpi red">
+          <div class="kpi-icon"><i class="fa-solid fa-bell"></i></div>
+          <div><span>Active Incidents</span><strong id="activeIncidents">0</strong><em id="criticalText">0 Critical</em></div>
+          <i class="fa-solid fa-arrow-right"></i>
+        </article>
+        <article class="kpi amber">
+          <div class="kpi-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+          <div><span>My Assignments</span><strong id="myAssignments">1</strong><em>View Details</em></div>
+          <i class="fa-solid fa-arrow-right"></i>
+        </article>
+        <article class="kpi blue">
+          <div class="kpi-icon"><i class="fa-solid fa-wave-square"></i></div>
+          <div><span>Response Time</span><strong id="responseTime">04:35</strong><em>Minutes (avg)</em></div>
+          <i class="fa-solid fa-arrow-right"></i>
+        </article>
+        <article class="kpi green">
+          <div class="kpi-icon"><i class="fa-regular fa-circle-check"></i></div>
+          <div><span>Missions Completed</span><strong id="missionsCompleted">24</strong><em>This Month</em></div>
+          <i class="fa-solid fa-arrow-right"></i>
+        </article>
+        <article class="kpi purple">
+          <div class="kpi-icon"><i class="fa-regular fa-star"></i></div>
+          <div><span>Rating</span><strong>4.8 / 5</strong><em>Excellent</em></div>
+          <i class="fa-solid fa-arrow-right"></i>
+        </article>
+      </section>
+
+      <div class="dashboard-grid">
+        <section class="left-column">
+          <article class="panel map-panel" id="location">
+            <h2>Live Incident Map</h2>
+            <div class="incident-map">
+              <button class="map-control plus" type="button">+</button>
+              <button class="map-control minus" type="button">-</button>
+              <span class="map-label" style="--x:11%;--y:36%">Barangay 1</span>
+              <span class="map-label" style="--x:46%;--y:14%">Barangay 2</span>
+              <span class="map-label" style="--x:52%;--y:33%">Barangay 3</span>
+              <span class="map-label" style="--x:60%;--y:18%">Barangay 8</span>
+              <span class="map-label" style="--x:78%;--y:86%">Barangay 9</span>
+              <span class="map-label" style="--x:46%;--y:27%">City Hall</span>
+              <span class="pin responder" style="--x:42%;--y:51%"><i></i></span>
+              <span class="pin unit" style="--x:14%;--y:62%"><i class="fa-solid fa-car-side"></i></span>
+              <span class="pin unit" style="--x:27%;--y:24%"><i class="fa-solid fa-car-side"></i></span>
+              <span class="pin unit" style="--x:54%;--y:31%"><i class="fa-solid fa-car-side"></i></span>
+              <span class="pin unit" style="--x:64%;--y:43%"><i class="fa-solid fa-car-side"></i></span>
+              <span class="pin unit" style="--x:50%;--y:88%"><i class="fa-solid fa-car-side"></i></span>
+              <span class="pin critical" style="--x:42%;--y:19%"><i class="fa-solid fa-exclamation"></i></span>
+              <span class="pin critical" style="--x:74%;--y:76%"><i class="fa-solid fa-exclamation"></i></span>
+              <span class="pin high" style="--x:29%;--y:44%"><i class="fa-solid fa-fire-flame-curved"></i></span>
+              <span class="pin responder-small" style="--x:45%;--y:60%"></span>
+              <div class="map-legend">
+                <h3>Risk Level</h3>
+                <span><i class="critical"></i>Critical</span>
+                <span><i class="high"></i>High</span>
+                <span><i class="moderate"></i>Moderate</span>
+                <span><i class="low"></i>Low</span>
+                <span><i class="unit"></i>Responder</span>
+              </div>
+            </div>
+          </article>
+
+          <div class="bottom-grid">
+            <article class="panel status-panel" id="availability">
+              <div class="panel-heading">
+                <div>
+                  <h2>My Status</h2>
+                  <p id="statusSummary">Ready for dispatch</p>
+                </div>
+                <div class="status-toggle" aria-label="Responder status">
+                  <button type="button" data-status="available">Available</button>
+                  <button type="button" data-status="responding">Responding</button>
+                  <button type="button" data-status="offline">Offline</button>
+                </div>
+              </div>
+              <div class="status-list">
+                <div>
+                  <i class="fa-solid fa-location-dot"></i>
+                  <span>Current Location</span>
+                  <strong id="currentLocation">Barangay 5, City Center</strong>
+                </div>
+                <div>
+                  <i class="fa-solid fa-car-side"></i>
+                  <span>Vehicle / Unit</span>
+                  <strong id="vehicleUnit">PCR-12</strong>
+                </div>
+                <div>
+                  <i class="fa-solid fa-phone"></i>
+                  <span>Contact</span>
+                  <strong>0905 123 4567</strong>
+                </div>
+              </div>
+              <button class="end-duty" type="button">End Duty</button>
+            </article>
+
+            <article class="panel alerts-panel" id="incidents">
+              <div class="panel-heading"><h2>Recent Alerts</h2><a href="#">View All</a></div>
+              <div id="recentAlerts" class="recent-alerts"></div>
+            </article>
+          </div>
+        </section>
+
+        <aside class="right-column">
+          <article class="assignment-card" id="missions">
+            <h2>Active Assignment</h2>
+            <div class="assignment-body">
+              <div class="assignment-meta">
+                <strong id="assignmentId">Incident #INC-2024-0058</strong>
+                <span id="assignmentSeverity">Critical</span>
+              </div>
+              <h3 id="assignmentTitle">Fire Incident</h3>
+              <p><i class="fa-solid fa-location-dot"></i><span id="assignmentLocation">Barangay 5, Dela Paz St.</span></p>
+              <div class="assignment-row">
+                <span><i class="fa-regular fa-calendar-days"></i><span id="assignmentTime">Today, 10:24 AM</span></span>
+                <span><i class="fa-regular fa-clock"></i>0.9 km away</span>
+              </div>
+              <hr />
+              <h4>Details</h4>
+              <p id="assignmentDetails">Residential fire reported. Possible occupants trapped. Need immediate assistance.</p>
+              <div class="assignment-actions">
+                <button type="button">View Details</button>
+                <button type="button" class="navigate">Navigate</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel quick-panel">
+            <h2>Quick Actions</h2>
+            <div class="quick-grid">
+              <button class="sos" type="button"><i>SOS</i><span>SOS</span><em>Emergency</em></button>
+              <button type="button"><i class="fa-regular fa-clipboard"></i><span>Incident Report</span><em>Report</em></button>
+              <button type="button"><i class="fa-solid fa-users"></i><span>Request Backup</span><em>Request</em></button>
+              <button type="button"><i class="fa-regular fa-comment"></i><span>Chat</span><em>Command Center</em></button>
+              <button type="button"><i class="fa-solid fa-arrows-rotate"></i><span>Update Status</span><em>Status</em></button>
+              <button type="button"><i class="fa-regular fa-map"></i><span>View Map</span><em>Full Map</em></button>
+            </div>
+          </article>
+        </aside>
+      </div>
+
+      <footer class="footer">
+        <span>&copy; 2024 AgilaCom Responder System. All rights reserved.</span>
+        <span>Version 1.0.0</span>
+      </footer>
+    </main>
+  </div>
+
+   <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/responder-dashboard.js"></script>
+</body>
+</html>
