@@ -21,7 +21,7 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    if (user.status === "inactive") {
+    if (user.accountStatus === "inactive") {
       return res.status(403).json({ message: "Account is inactive" });
     }
 
@@ -31,9 +31,25 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    if (responderRoles.includes(user.role) && user.status !== "responding") {
-      user.status = "available";
-      await user.save();
+    if (responderRoles.includes(user.role) && user.responderStatus !== "responding") {
+      user.responderStatus = "available";
+    }
+
+    user.isOnline = true;
+    user.lastSeenAt = new Date();
+    await user.save();
+
+    if (responderRoles.includes(user.role)) {
+      req.app.get("io")?.emit("responderStatusUpdated", {
+        responderId: user._id,
+        name: user.name,
+        role: user.role,
+        agency: user.agency,
+        status: user.responderStatus,
+        responderStatus: user.responderStatus,
+        isOnline: user.isOnline,
+        lastSeenAt: user.lastSeenAt,
+      });
     }
 
     res.json({
@@ -46,9 +62,32 @@ exports.login = async (req, res) => {
         agency: user.agency,
         rank: user.rank,
         unit: user.unit,
-        status: user.status,
+        accountStatus: user.accountStatus,
+        responderStatus: user.responderStatus,
+        status: user.responderStatus,
+        photo: user.photo,
       },
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.logout = async (req, res) => {
+  try {
+    req.user.isOnline = false;
+    req.user.responderStatus = "offline";
+    req.user.lastSeenAt = new Date();
+    await req.user.save();
+
+    req.app.get("io")?.emit("responderStatusUpdated", {
+      responderId: req.user._id,
+      status: "offline",
+      isOnline: false,
+      lastSeenAt: req.user.lastSeenAt,
+    });
+
+    res.json({ message: "Logged out successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

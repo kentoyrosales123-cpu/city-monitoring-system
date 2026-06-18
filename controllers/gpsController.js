@@ -2,7 +2,13 @@ const User = require("../models/User");
 const GpsLog = require("../models/GpsLog");
 
 const responderRoles = ["police", "fire", "medical", "drrm", "barangay", "responder"];
-const onlineStatuses = ["available", "responding", "on_duty"];
+const onlineStatuses = ["available", "busy", "responding"];
+const onlineWindowMs = 5 * 60 * 1000;
+
+function isRecentlyOnline(user) {
+  if (!user.lastSeenAt) return false;
+  return Date.now() - new Date(user.lastSeenAt).getTime() <= onlineWindowMs;
+}
 
 exports.updateLocation = async (req, res) => {
   try {
@@ -20,6 +26,8 @@ exports.updateLocation = async (req, res) => {
         latitude,
         longitude,
         lastLocationUpdate: new Date(),
+        lastSeenAt: new Date(),
+        isOnline: true,
       },
       { new: true }
     ).select("-password");
@@ -42,6 +50,9 @@ exports.updateLocation = async (req, res) => {
       latitude: user.latitude,
       longitude: user.longitude,
       lastLocationUpdate: user.lastLocationUpdate,
+      lastSeenAt: user.lastSeenAt,
+      responderStatus: user.responderStatus,
+      isOnline: user.isOnline,
     });
 
     res.json({
@@ -55,15 +66,30 @@ exports.updateLocation = async (req, res) => {
 
 exports.getLiveResponders = async (req, res) => {
   try {
-    const responders = await User.find({
+    const query = {
       role: { $in: responderRoles },
-      status: { $in: onlineStatuses },
-    })
+    };
+
+    if (req.query.status) query.responderStatus = req.query.status;
+    if (req.query.agency) query.agency = req.query.agency;
+    if (req.query.station) query.stationRef = req.query.station;
+    if (req.query.barangay) query.barangayRef = req.query.barangay;
+
+    const responders = await User.find(query)
       .select("-password")
       .populate("agency")
-      .sort({ lastLocationUpdate: -1 });
+      .populate("stationRef")
+      .populate("barangayRef")
+      .sort({ lastSeenAt: -1, lastLocationUpdate: -1 });
 
-    res.json(responders);
+    const rows = responders.map((responder) => {
+      const record = responder.toObject();
+      const recentlyOnline = isRecentlyOnline(record);
+      record.isOnline = Boolean(record.isOnline && recentlyOnline && onlineStatuses.includes(record.responderStatus));
+      return record;
+    });
+
+    res.json(rows);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

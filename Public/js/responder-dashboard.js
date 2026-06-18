@@ -16,6 +16,7 @@ const headers = {
 const els = {
   responderName: document.getElementById("responderName"),
   responderRole: document.getElementById("responderRole"),
+  responderAvatar: document.getElementById("responderAvatar"),
   statusSummary: document.getElementById("statusSummary"),
   statusButtons: document.querySelectorAll(".status-toggle button"),
   topResponderName: document.getElementById("topResponderName"),
@@ -36,6 +37,15 @@ const els = {
   assignmentTime: document.getElementById("assignmentTime"),
   assignmentDetails: document.getElementById("assignmentDetails"),
   logoutBtn: document.getElementById("logoutBtn"),
+  profileSummary: document.getElementById("profileSummary"),
+  profileFullName: document.getElementById("profileFullName"),
+  profileRole: document.getElementById("profileRole"),
+  profileEmail: document.getElementById("profileEmail"),
+  profileAgency: document.getElementById("profileAgency"),
+  profileRank: document.getElementById("profileRank"),
+  profileUnit: document.getElementById("profileUnit"),
+  profileAccountStatus: document.getElementById("profileAccountStatus"),
+  profileResponderStatus: document.getElementById("profileResponderStatus"),
 };
 
 const roleLabels = {
@@ -54,8 +64,50 @@ els.topResponderRole.textContent = roleLabels[user.role] || "Responder";
 els.vehicleUnit.textContent = user.unit || "PCR-12";
 setStatusUI(normalizeStatus(user.status));
 
+function renderAvatar(photo, name) {
+  if (!photo) return `<i class="fa-solid fa-user"></i>`;
+  return `<img src="${photo}" alt="${name || "User"} photo" />`;
+}
+
+function renderProfile(profile) {
+  const status = normalizeStatus(profile.responderStatus || profile.status);
+  const roleLabel = roleLabels[profile.role] || formatLabel(profile.role);
+  const agencyName = profile.agency?.name || profile.agency || "N/A";
+
+  els.responderName.textContent = profile.name || "Responder";
+  els.topResponderName.textContent = profile.name || "Responder";
+  els.responderRole.textContent = roleLabel;
+  els.topResponderRole.textContent = roleLabel;
+  els.vehicleUnit.textContent = profile.unit || "N/A";
+  els.responderAvatar.innerHTML = renderAvatar(profile.photo, profile.name);
+
+  els.profileSummary.textContent = `${roleLabel} - ${profile.unit || "No unit assigned"}`;
+  els.profileFullName.textContent = profile.name || "Responder";
+  els.profileRole.textContent = roleLabel;
+  els.profileEmail.textContent = profile.email || "N/A";
+  els.profileAgency.textContent = agencyName;
+  els.profileRank.textContent = profile.rank || "N/A";
+  els.profileUnit.textContent = profile.unit || "N/A";
+  els.profileAccountStatus.textContent = formatLabel(profile.accountStatus || "active");
+  els.profileResponderStatus.textContent = formatLabel(status);
+
+  user.name = profile.name;
+  user.email = profile.email;
+  user.role = profile.role;
+  user.agency = profile.agency;
+  user.rank = profile.rank;
+  user.unit = profile.unit;
+  user.accountStatus = profile.accountStatus;
+  user.responderStatus = status;
+  user.status = status;
+  user.photo = profile.photo;
+  localStorage.setItem("user", JSON.stringify(user));
+  setStatusUI(status);
+}
+
 function normalizeStatus(status) {
   if (status === "responding") return "responding";
+  if (status === "busy") return "busy";
   if (status === "offline" || status === "off_duty" || status === "inactive") return "offline";
   return "available";
 }
@@ -63,6 +115,7 @@ function normalizeStatus(status) {
 function setStatusUI(status) {
   const statusCopy = {
     available: "Ready for dispatch",
+    busy: "Occupied with task",
     responding: "Currently assigned",
     offline: "Unavailable for calls",
   };
@@ -94,7 +147,8 @@ async function updateResponderStatus(status, options = {}) {
 
     const data = await response.json();
 
-    user.status = normalizeStatus(data.user.status);
+    user.status = normalizeStatus(data.user.responderStatus || data.user.status);
+    user.responderStatus = user.status;
     localStorage.setItem("user", JSON.stringify(user));
     setStatusUI(user.status);
     return true;
@@ -173,7 +227,11 @@ async function verifySession() {
     if (!response.ok) {
       localStorage.clear();
       window.location.href = "/login.html";
+      return;
     }
+
+    const profile = await response.json();
+    renderProfile(profile);
   } catch (error) {
     localStorage.clear();
     window.location.href = "/login.html";
@@ -314,9 +372,24 @@ function fallbackIncidents() {
 }
 
 els.logoutBtn.addEventListener("click", async () => {
-  await updateResponderStatus("offline", { silent: true });
-  localStorage.clear();
-  window.location.href = "/login.html";
+  try {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      headers,
+    });
+  } finally {
+    localStorage.clear();
+    window.location.href = "/login.html";
+  }
+});
+
+window.addEventListener("beforeunload", () => {
+  fetch("/api/users/me/status", {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ status: "offline" }),
+    keepalive: true,
+  });
 });
 
 els.statusButtons.forEach((button) => {
@@ -328,6 +401,7 @@ els.statusButtons.forEach((button) => {
 });
 
 const socket = io();
+socket.emit("registerUser", user.id || user._id);
 
 socket.on("incidentCreated", (data) => {
   console.log("New incident:", data);
@@ -351,6 +425,10 @@ socket.on("testConnection", (data) => {
 
 });
 
+socket.on("responderStatusUpdated", () => {
+  loadDashboard();
+});
+
 function showIncidentNotification(title, type) {
   const popup = document.createElement("div");
 
@@ -371,5 +449,8 @@ function showIncidentNotification(title, type) {
 
 verifySession();
 updateResponderStatus(normalizeStatus(user.status), { silent: true });
+setInterval(() => {
+  updateResponderStatus(normalizeStatus(user.status), { silent: true });
+}, 60000);
 loadDashboard();
 updateLocation();

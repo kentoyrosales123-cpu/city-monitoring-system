@@ -674,6 +674,10 @@ button {
 .status-scene { color: #45f09a; background: rgba(34, 210, 111, 0.18); border: 1px solid rgba(34, 210, 111, 0.22); }
 .status-route { color: #ffc25a; background: rgba(255, 122, 26, 0.18); border: 1px solid rgba(255, 122, 26, 0.22); }
 .status-standby { color: #59b6ff; background: rgba(47, 140, 255, 0.16); border: 1px solid rgba(47, 140, 255, 0.22); }
+.status-available { color: #45f09a; background: rgba(34, 210, 111, 0.18); border: 1px solid rgba(34, 210, 111, 0.22); }
+.status-busy { color: #ffe08a; background: rgba(255, 192, 43, 0.18); border: 1px solid rgba(255, 192, 43, 0.22); }
+.status-responding { color: #ff9aaa; background: rgba(255, 69, 69, 0.16); border: 1px solid rgba(255, 69, 69, 0.22); }
+.status-offline { color: #c6d1df; background: rgba(142, 162, 187, 0.16); border: 1px solid rgba(142, 162, 187, 0.22); }
 
 .resource-bar {
   width: 128px;

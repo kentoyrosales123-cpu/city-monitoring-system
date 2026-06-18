@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+const responderRoles = ["responder", "police", "fire", "medical", "drrm", "barangay"];
+
 exports.protect = async (req, res, next) => {
   try {
     let token;
@@ -22,6 +24,17 @@ exports.protect = async (req, res, next) => {
 
     if (!req.user) {
       return res.status(401).json({ message: "User not found" });
+    }
+
+    if (req.user.accountStatus === "inactive") {
+      return res.status(403).json({ message: "Account is inactive" });
+    }
+
+    if (responderRoles.includes(req.user.role)) {
+      await User.findByIdAndUpdate(req.user._id, {
+        lastSeenAt: new Date(),
+        isOnline: req.user.responderStatus !== "offline",
+      });
     }
 
     next();

@@ -17,8 +17,8 @@
         </div>
       </div>
 
-      <section class="profile-card">
-        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+      <section class="profile-card" id="profile">
+        <div class="avatar" id="responderAvatar"><i class="fa-solid fa-user"></i></div>
         <div>
           <strong id="responderName">Responder</strong>
           <span id="responderRole">Police Responder</span>
@@ -35,7 +35,7 @@
         <a href="#location"><i class="fa-solid fa-crosshairs"></i>My Location</a>
         <a href="#availability"><i class="fa-solid fa-user-clock"></i>Availability</a>
         <a href="#reports"><i class="fa-regular fa-file-lines"></i>Reports</a>
-        <a href="#profile"><i class="fa-regular fa-user"></i>Profile</a>
+        <a href="#userProfile"><i class="fa-regular fa-user"></i>Profile</a>
         <a href="#settings"><i class="fa-solid fa-gear"></i>Settings</a>
         <button id="logoutBtn" type="button"><i class="fa-solid fa-power-off"></i>Logout</button>
       </nav>
@@ -132,6 +132,7 @@
                 </div>
                 <div class="status-toggle" aria-label="Responder status">
                   <button type="button" data-status="available">Available</button>
+                  <button type="button" data-status="busy">Busy</button>
                   <button type="button" data-status="responding">Responding</button>
                   <button type="button" data-status="offline">Offline</button>
                 </div>
@@ -196,6 +197,25 @@
               <button type="button"><i class="fa-regular fa-comment"></i><span>Chat</span><em>Command Center</em></button>
               <button type="button"><i class="fa-solid fa-arrows-rotate"></i><span>Update Status</span><em>Status</em></button>
               <button type="button"><i class="fa-regular fa-map"></i><span>View Map</span><em>Full Map</em></button>
+            </div>
+          </article>
+
+          <article class="panel responder-profile-panel" id="userProfile">
+            <div class="panel-heading">
+              <div>
+                <h2>User Profile</h2>
+                <p id="profileSummary">Responder account details</p>
+              </div>
+            </div>
+            <div class="responder-profile-grid">
+              <div><span>Name</span><strong id="profileFullName">Responder</strong></div>
+              <div><span>Role</span><strong id="profileRole">Responder</strong></div>
+              <div><span>Email</span><strong id="profileEmail">N/A</strong></div>
+              <div><span>Agency</span><strong id="profileAgency">N/A</strong></div>
+              <div><span>Rank</span><strong id="profileRank">N/A</strong></div>
+              <div><span>Unit</span><strong id="profileUnit">N/A</strong></div>
+              <div><span>Account</span><strong id="profileAccountStatus">Active</strong></div>
+              <div><span>Status</span><strong id="profileResponderStatus">Available</strong></div>
             </div>
           </article>
         </aside>

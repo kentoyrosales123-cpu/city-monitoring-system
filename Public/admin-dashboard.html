@@ -21,10 +21,11 @@
       </div>
 
       <nav class="nav-menu" aria-label="Admin navigation">
-        <a href="#" class="active"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
-        <a href="/admin-personnel.html"><i class="fa-solid fa-user-group"></i><span>Personnel</span></a>
-        <a href="#agencies"><i class="fa-solid fa-building-shield"></i><span>Agencies</span></a>
-        <a href="#monitoring"><i class="fa-solid fa-location-crosshairs"></i><span>Monitoring</span></a>
+        <a href="/admin-dashboard.html" class="active"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+        <a href="/users.html"><i class="fa-solid fa-users-gear"></i><span>Users</span></a>
+        <a href="/agencies.html"><i class="fa-solid fa-building-shield"></i><span>Agencies</span></a>
+        <a href="/status.html"><i class="fa-solid fa-signal"></i><span>Status</span></a>
+        <a href="/monitoring.html"><i class="fa-solid fa-location-crosshairs"></i><span>Monitoring</span></a>
         <a href="#incidents"><i class="fa-solid fa-triangle-exclamation"></i><span>Incidents</span></a>
         <a href="#reports"><i class="fa-solid fa-clipboard-list"></i><span>Reports</span></a>
         <a href="#analytics"><i class="fa-solid fa-chart-column"></i><span>Analytics</span></a>
@@ -200,18 +201,58 @@
             </div>
           </article>
 
-          <article class="panel health-panel" id="agencies">
-            <h2>System Health</h2>
-            <div class="health-list">
-              <div><span>GPS Tracking System</span><strong>Operational</strong></div>
-              <div><span>Risk Analysis Engine</span><strong>Operational</strong></div>
-              <div><span>Notification System</span><strong>Operational</strong></div>
-              <div><span>Database</span><strong>Operational</strong></div>
-              <div><span>Communication Hub</span><strong>Operational</strong></div>
+          <article class="panel agency-panel" id="agencies">
+            <div class="panel-header">
+              <h2>Agency Directory</h2>
+              <button class="ghost-btn compact" type="button" id="newAgencyBtn">New</button>
+            </div>
+            <div class="agency-summary-grid" id="agencySummaryGrid"></div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Agency</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="agenciesTable">
+                  <tr><td colspan="4">Loading agencies...</td></tr>
+                </tbody>
+              </table>
             </div>
           </article>
         </aside>
       </div>
+
+      <section class="panel create-panel" id="agencyFormPanel">
+        <div class="panel-header">
+          <h2 id="agencyFormTitle">Add Agency</h2>
+        </div>
+        <form id="agencyForm" class="form-grid">
+          <input type="hidden" id="agencyId" />
+          <input type="text" id="agencyName" placeholder="Agency Name" required />
+          <select id="agencyType" required>
+            <option value="">Select Agency Type</option>
+            <option value="police">Police</option>
+            <option value="fire">Fire</option>
+            <option value="medical">EMS</option>
+            <option value="drrm">DRRM</option>
+            <option value="barangay">Barangay</option>
+            <option value="command_center">Command Center</option>
+          </select>
+          <input type="text" id="agencyContactNumber" placeholder="Contact Number" />
+          <input type="text" id="agencyAddress" placeholder="Address" />
+          <select id="agencyStatus">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <button type="submit" class="btn-primary">Save Agency</button>
+          <button type="button" class="ghost-btn" id="cancelAgencyEdit">Cancel</button>
+          <p id="agencyMessage" class="message"></p>
+        </form>
+      </section>
 
       <section class="panel create-panel">
         <div class="panel-header">

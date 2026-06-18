@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Users | UrbanRisk AI</title>
+  <link rel="stylesheet" href="/css/admin-dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <h2>UrbanRisk AI</h2>
+          <p>Admin Console</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Admin navigation">
+        <a href="/admin-dashboard.html"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+        <a href="/users.html" class="active"><i class="fa-solid fa-users-gear"></i><span>Users</span></a>
+        <a href="/agencies.html"><i class="fa-solid fa-building-shield"></i><span>Agencies</span></a>
+        <a href="/status.html"><i class="fa-solid fa-signal"></i><span>Status</span></a>
+        <a href="/monitoring.html"><i class="fa-solid fa-location-crosshairs"></i><span>Monitoring</span></a>
+        <a href="/admin-dashboard.html#incidents"><i class="fa-solid fa-triangle-exclamation"></i><span>Incidents</span></a>
+        <a href="/admin-dashboard.html#reports"><i class="fa-solid fa-clipboard-list"></i><span>Reports</span></a>
+        <a href="/admin-dashboard.html#analytics"><i class="fa-solid fa-chart-column"></i><span>Analytics</span></a>
+        <a href="/admin-dashboard.html#logs"><i class="fa-solid fa-server"></i><span>System Logs</span></a>
+        <a href="/admin-dashboard.html#settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-profile">
+        <div class="profile-row">
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <div>
+            <strong id="adminName">Admin User</strong>
+            <span id="adminRole">System Administrator</span>
+          </div>
+        </div>
+        <div class="online-status"><span></span>Online</div>
+        <button class="logout-btn" id="logoutBtn" type="button">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="welcome-copy">
+          <h1>Users</h1>
+          <p>Create, update, and manage responder personnel records.</p>
+        </div>
+        <div class="topbar-actions">
+          <div class="date-card">
+            <i class="fa-regular fa-calendar-days"></i>
+            <div>
+              <strong id="currentDate">June 17, 2026</strong>
+              <span id="currentTime">Wednesday, 10:30 AM</span>
+            </div>
+          </div>
+          <div class="top-avatar"><i class="fa-solid fa-user"></i></div>
+        </div>
+      </header>
+
+      <section class="panel create-panel">
+        <div class="panel-header">
+          <h2>User Details</h2>
+        </div>
+        <form id="personnelForm" class="form-grid">
+          <input type="hidden" id="userId" />
+
+          <input id="name" placeholder="Full Name" required />
+          <input id="email" type="email" placeholder="Email" required />
+          <input id="password" type="password" placeholder="Password" />
+
+          <select id="role">
+            <option value="admin">Admin</option>
+            <option value="commander">Commander</option>
+            <option value="police">Police</option>
+            <option value="fire">Fire</option>
+            <option value="medical">EMS</option>
+            <option value="drrm">DRRM</option>
+            <option value="barangay">Barangay</option>
+            <option value="responder">Responder</option>
+          </select>
+
+          <select id="agency">
+            <option value="">Select Agency</option>
+          </select>
+          <input id="rank" placeholder="Rank" />
+          <input id="unit" placeholder="Unit" />
+          <select id="station">
+            <option value="">Select Station</option>
+          </select>
+          <select id="barangay">
+            <option value="">Select Barangay</option>
+          </select>
+          <label class="file-upload">
+            <span>Profile Photo</span>
+            <input id="photo" type="file" accept="image/*" />
+          </label>
+
+          <select id="accountStatus">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+
+          <select id="responderStatus">
+            <option value="offline">Offline</option>
+            <option value="available">Available</option>
+            <option value="busy">Busy</option>
+            <option value="responding">Responding</option>
+          </select>
+
+          <button type="submit" class="btn-primary">Save User</button>
+        </form>
+      </section>
+
+      <section class="panel create-panel">
+        <div class="panel-header">
+          <h2>Assignment Setup</h2>
+        </div>
+        <div class="assignment-tools-grid">
+          <form id="stationForm" class="mini-form">
+            <h3>Add Station</h3>
+            <input id="stationName" placeholder="Station / Office Name" required />
+            <select id="stationAgency">
+              <option value="">Linked Agency</option>
+            </select>
+            <select id="stationType">
+              <option value="other">Other</option>
+              <option value="police">Police</option>
+              <option value="fire">Fire</option>
+              <option value="medical">EMS</option>
+              <option value="drrm">DRRM</option>
+              <option value="barangay">Barangay</option>
+              <option value="command_center">Command Center</option>
+            </select>
+            <button class="btn-primary" type="submit">Add Station</button>
+          </form>
+          <form id="barangayForm" class="mini-form">
+            <h3>Add Barangay</h3>
+            <input id="barangayName" placeholder="Barangay Name" required />
+            <input id="barangayDistrict" placeholder="District / Zone" />
+            <input id="barangayContactNumber" placeholder="Contact Number" />
+            <button class="btn-primary" type="submit">Add Barangay</button>
+          </form>
+          <form id="bulkAssignmentForm" class="mini-form">
+            <h3>Bulk Assignment</h3>
+            <select id="bulkAgency">
+              <option value="">Assign Agency</option>
+            </select>
+            <select id="bulkStation">
+              <option value="">Assign Station</option>
+            </select>
+            <select id="bulkBarangay">
+              <option value="">Assign Barangay</option>
+            </select>
+            <button class="btn-primary" type="submit">Assign Selected</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="panel create-panel">
+        <div class="panel-header">
+          <h2>User List</h2>
+          <label class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="personnelSearch" placeholder="Search name, agency, or station" />
+          </label>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Select</th>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Agency</th>
+                <th>Station</th>
+                <th>Barangay</th>
+                <th>Account</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="personnelTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="profileModal" hidden>
+    <section class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profileName">
+      <button class="modal-close" id="closeProfileModal" type="button" aria-label="Close profile">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="profile-modal-header">
+        <div class="profile-photo large" id="profilePhoto"><i class="fa-solid fa-user"></i></div>
+        <div>
+          <h2 id="profileName">Personnel Profile</h2>
+          <p id="profileSubtitle">Role and unit</p>
+        </div>
+      </div>
+      <div class="profile-detail-grid" id="profileDetails"></div>
+      <div class="agency-personnel-panel">
+        <h3>Assignment History</h3>
+        <div id="assignmentHistoryList" class="agency-personnel-list"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/js/admin-users.js"></script>
+</body>
+</html>

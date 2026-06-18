@@ -30,8 +30,24 @@ const els = {
   drrmCount: document.getElementById("drrmCount"),
   userMessage: document.getElementById("userMessage"),
   createUserForm: document.getElementById("createUserForm"),
+  agencySummaryGrid: document.getElementById("agencySummaryGrid"),
+  agenciesTable: document.getElementById("agenciesTable"),
+  agencyForm: document.getElementById("agencyForm"),
+  agencyId: document.getElementById("agencyId"),
+  agencyFormTitle: document.getElementById("agencyFormTitle"),
+  agencyName: document.getElementById("agencyName"),
+  agencyType: document.getElementById("agencyType"),
+  agencyContactNumber: document.getElementById("agencyContactNumber"),
+  agencyAddress: document.getElementById("agencyAddress"),
+  agencyStatus: document.getElementById("agencyStatus"),
+  agencyMessage: document.getElementById("agencyMessage"),
+  newAgencyBtn: document.getElementById("newAgencyBtn"),
+  cancelAgencyEdit: document.getElementById("cancelAgencyEdit"),
   logoutBtn: document.getElementById("logoutBtn"),
 };
+
+let agenciesState = [];
+let usersState = [];
 
 els.adminName.textContent = user.name || "Admin User";
 els.adminRole.textContent = user.rank || user.position || "System Administrator";
@@ -58,6 +74,15 @@ function formatLabel(value) {
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function incidentTypeIcon(type) {
   const normalized = String(type || "").toLowerCase();
   if (normalized.includes("fire")) return "fa-fire-flame-curved";
@@ -78,10 +103,27 @@ function severityBadge(severity) {
 
 function statusBadge(status) {
   const normalized = String(status || "").toLowerCase();
+  if (normalized.includes("inactive") || normalized.includes("offline")) return "badge-inactive";
   if (normalized.includes("resolved") || normalized.includes("active")) return "badge-resolved";
   if (normalized.includes("ongoing") || normalized.includes("pending")) return "badge-ongoing";
   if (normalized.includes("validation") || normalized.includes("review")) return "badge-pending";
   return "badge-pending";
+}
+
+function agencyIcon(type) {
+  const normalized = String(type || "").toLowerCase();
+  if (normalized === "police") return "fa-shield-halved";
+  if (normalized === "fire") return "fa-fire-flame-curved";
+  if (normalized === "medical") return "fa-briefcase-medical";
+  if (normalized === "drrm") return "fa-hands-holding-circle";
+  if (normalized === "barangay") return "fa-people-roof";
+  return "fa-building-shield";
+}
+
+function agencyLabel(type) {
+  if (type === "medical") return "EMS";
+  if (type === "drrm") return "DRRM";
+  return formatLabel(type);
 }
 
 function pickSeverity(incident) {
@@ -143,18 +185,99 @@ async function loadDashboard() {
 
     els.totalUsers.textContent = users.length;
     els.totalAgencies.textContent = agencies.length;
-    els.liveResponders.textContent = responders.length;
+    els.liveResponders.textContent = responders.filter((responder) => responder.isOnline).length;
     els.totalIncidents.textContent = incidents.length;
     els.donutTotal.textContent = incidents.length;
+    agenciesState = agencies;
+    usersState = users;
 
     renderIncidents(incidents);
     renderIncidentTypes(incidents);
     renderStatusBreakdown(incidents);
     renderUnitCounts(users);
+    renderAgencies(agencies, users);
   } catch (error) {
     console.error(error);
     els.incidentsTable.innerHTML = `<tr><td colspan="7">Unable to load dashboard data.</td></tr>`;
   }
+}
+
+function countPersonnelForAgencyType(type, users) {
+  return users.filter((candidate) => {
+    const agencyType = candidate.agency?.type;
+    const role = String(candidate.role || "").toLowerCase();
+    return agencyType === type || role === type;
+  }).length;
+}
+
+function renderAgencies(agencies, users) {
+  const managedTypes = ["police", "fire", "medical", "drrm", "barangay"];
+
+  els.agencySummaryGrid.innerHTML = managedTypes
+    .map((type) => {
+      const agencyCount = agencies.filter((agency) => agency.type === type).length;
+      const personnelCount = countPersonnelForAgencyType(type, users);
+
+      return `
+        <div class="agency-type-card ${type}">
+          <i class="fa-solid ${agencyIcon(type)}"></i>
+          <div>
+            <strong>${agencyLabel(type)}</strong>
+            <span>${agencyCount} agencies</span>
+            <b>${personnelCount}</b>
+            <em>Responders</em>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  if (!agencies.length) {
+    els.agenciesTable.innerHTML = `<tr><td colspan="4">No agencies registered.</td></tr>`;
+    return;
+  }
+
+  els.agenciesTable.innerHTML = agencies
+    .map((agency) => `
+      <tr>
+        <td>
+          <button class="table-link" type="button" data-agency-action="edit" data-id="${agency._id}">
+            ${escapeHtml(agency.name)}
+          </button>
+          <span class="table-subtext">${escapeHtml(agency.contactNumber || agency.address || "No contact details")}</span>
+        </td>
+        <td><i class="fa-solid ${agencyIcon(agency.type)}"></i> ${escapeHtml(agencyLabel(agency.type))}</td>
+        <td><span class="badge ${statusBadge(agency.status)}">${escapeHtml(formatLabel(agency.status || "active"))}</span></td>
+        <td>
+          <div class="table-actions">
+            <button class="ghost-btn compact" type="button" data-agency-action="edit" data-id="${agency._id}">Edit</button>
+            <button class="ghost-btn compact danger" type="button" data-agency-action="delete" data-id="${agency._id}">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `)
+    .join("");
+}
+
+function resetAgencyForm() {
+  els.agencyForm.reset();
+  els.agencyId.value = "";
+  els.agencyFormTitle.textContent = "Add Agency";
+  els.agencyMessage.className = "message";
+  els.agencyMessage.textContent = "";
+}
+
+function editAgency(agency) {
+  els.agencyId.value = agency._id;
+  els.agencyName.value = agency.name || "";
+  els.agencyType.value = agency.type || "";
+  els.agencyContactNumber.value = agency.contactNumber || "";
+  els.agencyAddress.value = agency.address || "";
+  els.agencyStatus.value = agency.status || "active";
+  els.agencyFormTitle.textContent = "Edit Agency";
+  els.agencyMessage.className = "message";
+  els.agencyMessage.textContent = "";
+  document.getElementById("agencyFormPanel").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function renderIncidents(incidents) {
@@ -284,6 +407,81 @@ els.createUserForm.addEventListener("submit", async (event) => {
     els.userMessage.textContent = error.message;
   }
 });
+
+els.agencyForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  els.agencyMessage.className = "message";
+  els.agencyMessage.textContent = "";
+
+  const id = els.agencyId.value;
+  const body = {
+    name: els.agencyName.value.trim(),
+    type: els.agencyType.value,
+    contactNumber: els.agencyContactNumber.value.trim(),
+    address: els.agencyAddress.value.trim(),
+    status: els.agencyStatus.value,
+  };
+
+  try {
+    const response = await fetch(id ? `/api/agencies/${id}` : "/api/agencies", {
+      method: id ? "PUT" : "POST",
+      headers,
+      body: JSON.stringify(body),
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to save agency");
+    }
+
+    resetAgencyForm();
+    els.agencyMessage.className = "message success";
+    els.agencyMessage.textContent = data.message || "Agency saved successfully.";
+    loadDashboard();
+  } catch (error) {
+    els.agencyMessage.className = "message error";
+    els.agencyMessage.textContent = error.message;
+  }
+});
+
+els.agenciesTable.addEventListener("click", async (event) => {
+  const actionButton = event.target.closest("[data-agency-action]");
+  if (!actionButton) return;
+
+  const agency = agenciesState.find((item) => item._id === actionButton.dataset.id);
+
+  if (actionButton.dataset.agencyAction === "edit" && agency) {
+    editAgency(agency);
+  }
+
+  if (actionButton.dataset.agencyAction === "delete" && agency) {
+    if (!confirm(`Delete ${agency.name}?`)) return;
+
+    try {
+      const response = await fetch(`/api/agencies/${agency._id}`, {
+        method: "DELETE",
+        headers,
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete agency");
+      }
+
+      loadDashboard();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+});
+
+els.newAgencyBtn.addEventListener("click", () => {
+  resetAgencyForm();
+  document.getElementById("agencyFormPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+els.cancelAgencyEdit.addEventListener("click", resetAgencyForm);
 
 els.logoutBtn.addEventListener("click", () => {
   localStorage.clear();

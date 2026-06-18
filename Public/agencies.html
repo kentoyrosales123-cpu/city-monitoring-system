@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agencies | UrbanRisk AI</title>
+  <link rel="stylesheet" href="/css/admin-dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <h2>UrbanRisk AI</h2>
+          <p>Admin Console</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Admin navigation">
+        <a href="/admin-dashboard.html"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+        <a href="/users.html"><i class="fa-solid fa-users-gear"></i><span>Users</span></a>
+        <a href="/agencies.html" class="active"><i class="fa-solid fa-building-shield"></i><span>Agencies</span></a>
+        <a href="/status.html"><i class="fa-solid fa-signal"></i><span>Status</span></a>
+        <a href="/monitoring.html"><i class="fa-solid fa-location-crosshairs"></i><span>Monitoring</span></a>
+        <a href="/admin-dashboard.html#incidents"><i class="fa-solid fa-triangle-exclamation"></i><span>Incidents</span></a>
+        <a href="/admin-dashboard.html#reports"><i class="fa-solid fa-clipboard-list"></i><span>Reports</span></a>
+        <a href="/admin-dashboard.html#analytics"><i class="fa-solid fa-chart-column"></i><span>Analytics</span></a>
+        <a href="/admin-dashboard.html#logs"><i class="fa-solid fa-server"></i><span>System Logs</span></a>
+        <a href="/admin-dashboard.html#settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-profile">
+        <div class="profile-row">
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <div>
+            <strong id="adminName">Admin User</strong>
+            <span id="adminRole">System Administrator</span>
+          </div>
+        </div>
+        <div class="online-status"><span></span>Online</div>
+        <button class="logout-btn" id="logoutBtn" type="button">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="welcome-copy">
+          <h1>Agencies</h1>
+          <p>Monitor registered emergency response agencies and assigned personnel.</p>
+        </div>
+        <div class="topbar-actions">
+          <div class="date-card">
+            <i class="fa-regular fa-calendar-days"></i>
+            <div>
+              <strong id="currentDate">June 18, 2026</strong>
+              <span id="currentTime">Thursday, 9:36 AM</span>
+            </div>
+          </div>
+          <div class="top-avatar"><i class="fa-solid fa-user"></i></div>
+        </div>
+      </header>
+
+      <section class="agency-monitor-grid" aria-label="Agency summary">
+        <article class="kpi-card cyan">
+          <div class="kpi-icon"><i class="fa-solid fa-building-shield"></i></div>
+          <div>
+            <p>Total Agencies</p>
+            <strong id="totalAgencies">0</strong>
+            <span>Registered records</span>
+          </div>
+          <div class="sparkline"></div>
+        </article>
+        <article class="kpi-card green">
+          <div class="kpi-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <div>
+            <p>Active Agencies</p>
+            <strong id="activeAgencies">0</strong>
+            <span>Operational</span>
+          </div>
+          <div class="sparkline"></div>
+        </article>
+        <article class="kpi-card red">
+          <div class="kpi-icon"><i class="fa-solid fa-circle-pause"></i></div>
+          <div>
+            <p>Inactive Agencies</p>
+            <strong id="inactiveAgencies">0</strong>
+            <span>Needs review</span>
+          </div>
+          <div class="sparkline"></div>
+        </article>
+        <article class="kpi-card amber">
+          <div class="kpi-icon"><i class="fa-solid fa-user-shield"></i></div>
+          <div>
+            <p>Assigned Personnel</p>
+            <strong id="assignedPersonnel">0</strong>
+            <span>Linked to agencies</span>
+          </div>
+          <div class="sparkline"></div>
+        </article>
+      </section>
+
+      <section class="panel create-panel" id="agencyFormPanel">
+        <div class="panel-header">
+          <h2 id="agencyFormTitle">Add Agency</h2>
+        </div>
+        <form id="agencyForm" class="form-grid">
+          <input type="hidden" id="agencyId" />
+          <input id="agencyName" placeholder="Agency Name" required />
+          <select id="agencyType" required>
+            <option value="">Select Agency Type</option>
+            <option value="police">Police</option>
+            <option value="fire">Fire</option>
+            <option value="medical">EMS</option>
+            <option value="drrm">DRRM</option>
+            <option value="barangay">Barangay</option>
+            <option value="command_center">Command Center</option>
+          </select>
+          <input id="agencyContactNumber" placeholder="Contact Number" />
+          <input id="agencyAddress" placeholder="Address" />
+          <select id="agencyStatus">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <button type="submit" class="btn-primary">Save Agency</button>
+          <button type="button" class="ghost-btn" id="cancelAgencyEdit">Cancel</button>
+          <p id="agencyMessage" class="message"></p>
+        </form>
+      </section>
+
+      <section class="panel create-panel">
+        <div class="panel-header">
+          <h2>Registered Agencies</h2>
+          <div class="agency-filter-row">
+            <label class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input id="agencySearch" placeholder="Search agency, type, address" />
+            </label>
+            <select id="agencyTypeFilter">
+              <option value="">All Types</option>
+              <option value="police">Police</option>
+              <option value="fire">Fire</option>
+              <option value="medical">EMS</option>
+              <option value="drrm">DRRM</option>
+              <option value="barangay">Barangay</option>
+              <option value="command_center">Command Center</option>
+            </select>
+            <select id="agencyStatusFilter">
+              <option value="">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <div class="agency-summary-grid wide" id="agencySummaryGrid"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Agency</th>
+                <th>Type</th>
+                <th>Contact</th>
+                <th>Address</th>
+                <th>Personnel</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="agenciesTable">
+              <tr><td colspan="7">Loading agencies...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="agencyModal" hidden>
+    <section class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="agencyProfileName">
+      <button class="modal-close" id="closeAgencyModal" type="button" aria-label="Close agency profile">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="profile-modal-header">
+        <div class="agency-modal-icon" id="agencyProfileIcon"><i class="fa-solid fa-building-shield"></i></div>
+        <div>
+          <h2 id="agencyProfileName">Agency Profile</h2>
+          <p id="agencyProfileSubtitle">Agency type and status</p>
+        </div>
+      </div>
+      <div class="profile-detail-grid" id="agencyProfileDetails"></div>
+      <div class="agency-personnel-panel">
+        <h3>Assigned Personnel</h3>
+        <div id="agencyPersonnelList" class="agency-personnel-list"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/js/admin-agencies.js"></script>
+</body>
+</html>

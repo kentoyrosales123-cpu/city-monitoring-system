@@ -39,6 +39,7 @@ const userSchema = new mongoose.Schema(
     agency: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Agency",
+      default: null,
     },
 
     rank: {
@@ -51,12 +52,53 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
-    status: {
+    station: {
       type: String,
-      enum: ["active", "inactive", "on_duty", "off_duty", "available",
-"responding",
-"offline"],
+      default: "",
+    },
+
+    stationRef: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Station",
+      default: null,
+    },
+
+    barangay: {
+      type: String,
+      default: "",
+    },
+
+    barangayRef: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Barangay",
+      default: null,
+    },
+
+    photo: {
+      type: String,
+      default: "",
+    },
+
+    accountStatus: {
+      type: String,
+      enum: ["active", "inactive"],
       default: "active",
+    },
+
+    responderStatus: {
+      type: String,
+      enum: ["available", "busy", "responding", "offline"],
+      default: "offline",
+    },
+
+    isOnline: {
+      type: Boolean,
+      default: false,
+    },
+
+    lastSeenAt: {
+      type: Date,
+      default: null,
     },
 
     latitude: {
@@ -71,6 +113,7 @@ const userSchema = new mongoose.Schema(
 
     lastLocationUpdate: {
       type: Date,
+      default: null,
     },
 
     passwordResetToken: {

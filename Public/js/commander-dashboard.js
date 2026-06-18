@@ -66,6 +66,34 @@ function minutesAgo(dateValue) {
   return `${diff} min ago`;
 }
 
+function formatLastSeen(dateValue) {
+  if (!dateValue) return "Never";
+
+  const date = new Date(dateValue);
+  return date.toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function responderStatusClass(status, isOnline) {
+  if (!isOnline || status === "offline") return "status-offline";
+  if (status === "available") return "status-available";
+  if (status === "busy") return "status-busy";
+  if (status === "responding") return "status-responding";
+  return "status-standby";
+}
+
+function responderStatusColor(status, isOnline) {
+  if (!isOnline || status === "offline") return "#8ea2bb";
+  if (status === "available") return "#22d26f";
+  if (status === "busy") return "#ffc02b";
+  if (status === "responding") return "#ff4545";
+  return "#2f8cff";
+}
+
 function fetchData(url) {
   return fetch(url, { headers }).then(async (response) => {
     if (response.status === 401 || response.status === 403) {
@@ -116,23 +144,24 @@ async function loadDashboard() {
 
     els.criticalIncidents.textContent = criticalIncidents.length;
     els.activeIncidents.textContent = activeIncidents.length;
-    els.respondersOnline.textContent = responders.length;
-    els.unitsDeployed.textContent = responders.length;
+    const onlineResponders = responders.filter((responder) => responder.isOnline);
+    els.respondersOnline.textContent = onlineResponders.length;
+    els.unitsDeployed.textContent = onlineResponders.length;
     els.resolvedToday.textContent = resolvedToday.length;
     els.navAlertCount.textContent = criticalIncidents.length;
     els.overviewTotal.textContent = activeIncidents.length;
-    els.connectedUnits.textContent = responders.length;
+    els.connectedUnits.textContent = onlineResponders.length;
 
     const totalResponders = users.filter((u) =>
       ["police", "fire", "medical", "drrm", "barangay", "responder"].includes(u.role)
     ).length;
-    const responderPercent = totalResponders ? Math.round((responders.length / totalResponders) * 100) : 0;
+    const responderPercent = totalResponders ? Math.round((onlineResponders.length / totalResponders) * 100) : 0;
     els.respondersPercent.textContent = `${responderPercent}% of total`;
     els.unitsPercent.textContent = `${responderPercent}% of total units`;
 
     renderOverview(activeIncidents);
     renderAlerts(activeIncidents);
-    renderResponders(responders);
+    renderResponders(onlineResponders);
     renderResources(users, agencies);
     renderReport(activeIncidents);
     updateClock();
@@ -217,19 +246,22 @@ function renderResponders(responders) {
     name: responder.name || `Unit-${index + 1}`,
     unit: responder.unit || `${formatLabel(responder.role)} Response Unit`,
     role: responder.role,
-    status: index % 3 === 1 ? "En Route" : index % 3 === 2 ? "Standby" : "On Scene",
-    location: responder.barangay || responder.location || responder.agency?.name || "Central District",
+    status: responder.responderStatus || "offline",
+    isOnline: responder.isOnline,
+    location: responder.barangayRef?.name || responder.barangay || responder.location || responder.agency?.name || "Central District",
+    lastSeen: formatLastSeen(responder.lastSeenAt || responder.lastLocationUpdate),
   })) : fallback;
 
   els.responderList.innerHTML = rows.map((row) => {
-    const statusClass = row.status === "On Scene" ? "status-scene" : row.status === "En Route" ? "status-route" : "status-standby";
+    const statusClass = responderStatusClass(row.status, row.isOnline);
+    const dotColor = responderStatusColor(row.status, row.isOnline);
     return `
       <div class="responder-row">
         <div class="row-icon ${row.role}"><i class="fa-solid ${roleIcon(row.role)}"></i></div>
-        <div class="row-main"><strong>${row.name}</strong><span>${row.unit}</span></div>
-        <span class="status-badge ${statusClass}">${row.status}</span>
+        <div class="row-main"><strong>${row.name}</strong><span>${row.unit}</span><span>Last seen: ${row.lastSeen || "Never"}</span></div>
+        <span class="status-badge ${statusClass}">${formatLabel(row.status)}</span>
         <span>${row.location}</span>
-        <i class="status-dot" style="background:${row.status === "En Route" ? "#ff7a1a" : row.status === "Standby" ? "#2f8cff" : "#22d26f"}"></i>
+        <i class="status-dot" style="background:${dotColor}"></i>
       </div>
     `;
   }).join("");

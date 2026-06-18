@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitoring | UrbanRisk AI</title>
+  <link rel="stylesheet" href="/css/admin-dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+        <div><h2>UrbanRisk AI</h2><p>Admin Console</p></div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Admin navigation">
+        <a href="/admin-dashboard.html"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+        <a href="/users.html"><i class="fa-solid fa-users-gear"></i><span>Users</span></a>
+        <a href="/agencies.html"><i class="fa-solid fa-building-shield"></i><span>Agencies</span></a>
+        <a href="/status.html"><i class="fa-solid fa-signal"></i><span>Status</span></a>
+        <a href="/monitoring.html" class="active"><i class="fa-solid fa-location-crosshairs"></i><span>Monitoring</span></a>
+        <a href="/admin-dashboard.html#incidents"><i class="fa-solid fa-triangle-exclamation"></i><span>Incidents</span></a>
+        <a href="/admin-dashboard.html#reports"><i class="fa-solid fa-clipboard-list"></i><span>Reports</span></a>
+        <a href="/admin-dashboard.html#analytics"><i class="fa-solid fa-chart-column"></i><span>Analytics</span></a>
+      </nav>
+
+      <div class="sidebar-profile">
+        <div class="profile-row">
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <div><strong id="adminName">Admin User</strong><span id="adminRole">System Administrator</span></div>
+        </div>
+        <div class="online-status"><span></span>Online</div>
+        <button class="logout-btn" id="logoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="welcome-copy">
+          <h1>Monitoring</h1>
+          <p>Live responder locations, agency coverage, and active incident visibility.</p>
+        </div>
+        <div class="topbar-actions">
+          <div class="date-card">
+            <i class="fa-regular fa-calendar-days"></i>
+            <div><strong id="currentDate">June 18, 2026</strong><span id="currentTime">Thursday, 9:36 AM</span></div>
+          </div>
+          <div class="top-avatar"><i class="fa-solid fa-user"></i></div>
+        </div>
+      </header>
+
+      <section class="agency-monitor-grid" aria-label="Monitoring summary">
+        <article class="kpi-card cyan"><div class="kpi-icon"><i class="fa-solid fa-location-dot"></i></div><div><p>Tracked Units</p><strong id="trackedCount">0</strong><span>With coordinates</span></div><div class="sparkline"></div></article>
+        <article class="kpi-card green"><div class="kpi-icon"><i class="fa-solid fa-wifi"></i></div><div><p>Online Units</p><strong id="onlineCount">0</strong><span>Recently active</span></div><div class="sparkline"></div></article>
+        <article class="kpi-card amber"><div class="kpi-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><div><p>Active Incidents</p><strong id="incidentCount">0</strong><span>Visible on map</span></div><div class="sparkline"></div></article>
+        <article class="kpi-card red"><div class="kpi-icon"><i class="fa-solid fa-truck-medical"></i></div><div><p>Responding</p><strong id="respondingCount">0</strong><span>On incident</span></div><div class="sparkline"></div></article>
+      </section>
+
+      <section class="panel map-panel">
+        <div class="panel-header">
+          <h2>Live Monitoring Map</h2>
+          <div class="agency-filter-row">
+            <select id="agencyFilter"><option value="">All Agencies</option></select>
+            <select id="stationFilter"><option value="">All Stations</option></select>
+            <select id="barangayFilter"><option value="">All Barangays</option></select>
+            <select id="statusFilter">
+              <option value="">All Statuses</option>
+              <option value="available">Available</option>
+              <option value="busy">Busy</option>
+              <option value="responding">Responding</option>
+              <option value="offline">Offline</option>
+            </select>
+          </div>
+        </div>
+        <div class="incident-map monitoring-map" id="monitoringMap" aria-label="Live responder and incident map">
+          <div class="map-roads"></div>
+          <div class="map-legend">
+            <span><i class="unit"></i>Responder</span>
+            <span><i class="critical"></i>Incident</span>
+            <span><i class="low"></i>Available</span>
+            <span><i class="medium"></i>Busy</span>
+            <span><i class="high"></i>Responding</span>
+          </div>
+          <div id="mapPins"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Monitored Responders</h2>
+          <button class="ghost-btn" type="button" id="refreshBtn"><i class="fa-solid fa-rotate"></i>Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Agency</th>
+                <th>Station</th>
+                <th>Barangay</th>
+                <th>Status</th>
+                <th>Coordinates</th>
+                <th>Last Seen</th>
+              </tr>
+            </thead>
+            <tbody id="monitoringTable">
+              <tr><td colspan="7">Loading monitoring data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/admin-monitoring.js"></script>
+</body>
+</html>

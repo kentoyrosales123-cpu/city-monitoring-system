@@ -12,6 +12,9 @@ exports.getAgencies = async (req, res) => {
 exports.createAgency = async (req, res) => {
   try {
     const { name, type, contactNumber, address, status } = req.body;
+    if (!name || !type) {
+      return res.status(400).json({ message: "Agency name and type are required" });
+    }
 
     const agency = await Agency.create({
       name,
@@ -33,6 +36,9 @@ exports.createAgency = async (req, res) => {
 exports.updateAgency = async (req, res) => {
   try {
     const { name, type, contactNumber, address, status } = req.body;
+    if (!name || !type) {
+      return res.status(400).json({ message: "Agency name and type are required" });
+    }
 
     const agency = await Agency.findByIdAndUpdate(
       req.params.id,
@@ -43,7 +49,7 @@ exports.updateAgency = async (req, res) => {
         address,
         status,
       },
-      { new: true }
+      { new: true, runValidators: true }
     );
 
     if (!agency) {

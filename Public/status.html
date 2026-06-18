@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responder Status | UrbanRisk AI</title>
+  <link rel="stylesheet" href="/css/admin-dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+        <div><h2>UrbanRisk AI</h2><p>Admin Console</p></div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Admin navigation">
+        <a href="/admin-dashboard.html"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+        <a href="/users.html"><i class="fa-solid fa-users-gear"></i><span>Users</span></a>
+        <a href="/agencies.html"><i class="fa-solid fa-building-shield"></i><span>Agencies</span></a>
+        <a href="/status.html" class="active"><i class="fa-solid fa-signal"></i><span>Status</span></a>
+        <a href="/monitoring.html"><i class="fa-solid fa-location-crosshairs"></i><span>Monitoring</span></a>
+        <a href="/admin-dashboard.html#incidents"><i class="fa-solid fa-triangle-exclamation"></i><span>Incidents</span></a>
+        <a href="/admin-dashboard.html#reports"><i class="fa-solid fa-clipboard-list"></i><span>Reports</span></a>
+        <a href="/admin-dashboard.html#analytics"><i class="fa-solid fa-chart-column"></i><span>Analytics</span></a>
+      </nav>
+
+      <div class="sidebar-profile">
+        <div class="profile-row">
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <div><strong id="adminName">Admin User</strong><span id="adminRole">System Administrator</span></div>
+        </div>
+        <div class="online-status"><span></span>Online</div>
+        <button class="logout-btn" id="logoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="welcome-copy">
+          <h1>Responder Status</h1>
+          <p>Monitor online, available, busy, responding, and offline responders.</p>
+        </div>
+        <div class="topbar-actions">
+          <div class="date-card">
+            <i class="fa-regular fa-calendar-days"></i>
+            <div><strong id="currentDate">June 18, 2026</strong><span id="currentTime">Thursday, 9:36 AM</span></div>
+          </div>
+          <div class="top-avatar"><i class="fa-solid fa-user"></i></div>
+        </div>
+      </header>
+
+      <section class="agency-monitor-grid" aria-label="Responder status summary">
+        <article class="kpi-card cyan"><div class="kpi-icon"><i class="fa-solid fa-users"></i></div><div><p>Total Personnel</p><strong id="totalPersonnelCount">0</strong><span>Registered personnel</span></div><div class="sparkline"></div></article>
+        <article class="kpi-card green"><div class="kpi-icon"><i class="fa-solid fa-wifi"></i></div><div><p>Active Responders</p><strong id="onlineCount">0</strong><span>Online responders</span></div><div class="sparkline"></div></article>
+        <article class="kpi-card cyan"><div class="kpi-icon"><i class="fa-solid fa-circle-check"></i></div><div><p>Available Responders</p><strong id="availableCount">0</strong><span>Ready responders</span></div><div class="sparkline"></div></article>
+        <article class="kpi-card amber"><div class="kpi-icon"><i class="fa-solid fa-clock"></i></div><div><p>Busy Responders</p><strong id="busyCount">0</strong><span>Busy responders</span></div><div class="sparkline"></div></article>
+        <article class="kpi-card red"><div class="kpi-icon"><i class="fa-solid fa-truck-medical"></i></div><div><p>Responding Responders</p><strong id="respondingCount">0</strong><span>Active incidents</span></div><div class="sparkline"></div></article>
+      </section>
+
+      <section class="agency-summary-grid wide" aria-label="Personnel by agency type">
+        <article class="agency-type-card police"><i class="fa-solid fa-shield-halved"></i><div><strong>Police</strong><span>Total police personnel</span><b id="policeCount">0</b><em>Personnel</em></div></article>
+        <article class="agency-type-card fire"><i class="fa-solid fa-fire-flame-curved"></i><div><strong>Fire</strong><span>Total fire personnel</span><b id="fireCount">0</b><em>Personnel</em></div></article>
+        <article class="agency-type-card medical"><i class="fa-solid fa-briefcase-medical"></i><div><strong>EMS</strong><span>Total EMS personnel</span><b id="emsCount">0</b><em>Personnel</em></div></article>
+        <article class="agency-type-card drrm"><i class="fa-solid fa-hands-holding-circle"></i><div><strong>DRRM</strong><span>Total DRRM personnel</span><b id="drrmCount">0</b><em>Personnel</em></div></article>
+        <article class="agency-type-card barangay"><i class="fa-solid fa-people-roof"></i><div><strong>Barangay</strong><span>Total barangay responders</span><b id="barangayCount">0</b><em>Personnel</em></div></article>
+      </section>
+
+      <div class="dashboard-grid status-insights-grid">
+        <section class="panel chart-panel">
+          <h2>Agency Distribution Doughnut Chart</h2>
+          <div class="donut-row">
+            <div class="donut" id="agencyDistributionChart"><strong id="agencyDistributionTotal">0</strong><span>Total</span></div>
+            <div class="chart-list" id="agencyDistributionList"></div>
+          </div>
+        </section>
+
+        <section class="panel chart-panel">
+          <h2>Personnel Status Doughnut Chart</h2>
+          <div class="donut-row">
+            <div class="donut" id="personnelStatusChart"><strong id="personnelStatusTotal">0</strong><span>Responders</span></div>
+            <div class="chart-list" id="personnelStatusList"></div>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Recent Personnel Activity</h2>
+        </div>
+        <div class="table-wrap compact-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Agency</th>
+                <th>Status</th>
+                <th>Activity</th>
+              </tr>
+            </thead>
+            <tbody id="recentActivityTable">
+              <tr><td colspan="4">Loading activity...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel create-panel">
+        <div class="panel-header">
+          <h2>Live Responder View</h2>
+          <div class="agency-filter-row">
+            <select id="statusFilter">
+              <option value="">All Statuses</option>
+              <option value="available">Available</option>
+              <option value="busy">Busy</option>
+              <option value="responding">Responding</option>
+              <option value="offline">Offline</option>
+            </select>
+            <select id="agencyFilter"><option value="">All Agencies</option></select>
+            <select id="stationFilter"><option value="">All Stations</option></select>
+            <select id="barangayFilter"><option value="">All Barangays</option></select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Agency</th>
+                <th>Station</th>
+                <th>Barangay</th>
+                <th>Status</th>
+                <th>Online</th>
+                <th>Last Seen</th>
+              </tr>
+            </thead>
+            <tbody id="statusTable">
+              <tr><td colspan="7">Loading responders...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/admin-status.js"></script>
+</body>
+</html>
