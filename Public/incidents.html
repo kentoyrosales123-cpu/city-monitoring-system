@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Incidents | UrbanRisk AI</title>
+  <link rel="stylesheet" href="/css/admin-dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+        <div><h2>UrbanRisk AI</h2><p>Admin Console</p></div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Admin navigation">
+        <a href="/admin-dashboard.html"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+        <a href="/users.html"><i class="fa-solid fa-users-gear"></i><span>Users</span></a>
+        <a href="/agencies.html"><i class="fa-solid fa-building-shield"></i><span>Agencies</span></a>
+        <a href="/status.html"><i class="fa-solid fa-signal"></i><span>Status</span></a>
+        <a href="/monitoring.html"><i class="fa-solid fa-location-crosshairs"></i><span>Monitoring</span></a>
+        <a href="/incidents.html" class="active"><i class="fa-solid fa-triangle-exclamation"></i><span>Incidents</span></a>
+        <a href="/admin-dashboard.html#reports"><i class="fa-solid fa-clipboard-list"></i><span>Reports</span></a>
+        <a href="/admin-dashboard.html#analytics"><i class="fa-solid fa-chart-column"></i><span>Analytics</span></a>
+      </nav>
+
+      <div class="sidebar-profile">
+        <div class="profile-row">
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <div><strong id="adminName">Admin User</strong><span id="adminRole">System Administrator</span></div>
+        </div>
+        <div class="online-status"><span></span>Online</div>
+        <button class="logout-btn" id="logoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="welcome-copy">
+          <h1>Incidents</h1>
+          <p>Review reports, track workflow status, and coordinate response activity.</p>
+        </div>
+        <div class="topbar-actions">
+          <a class="ghost-btn" href="/report-incident.html"><i class="fa-solid fa-file-circle-plus"></i>Report Incident</a>
+          <div class="date-card">
+            <i class="fa-regular fa-calendar-days"></i>
+            <div><strong id="currentDate">June 18, 2026</strong><span id="currentTime">Thursday, 9:36 AM</span></div>
+          </div>
+          <div class="top-avatar"><i class="fa-solid fa-user"></i></div>
+        </div>
+      </header>
+
+      <section class="agency-monitor-grid" aria-label="Incident summary">
+        <article class="kpi-card cyan"><div class="kpi-icon"><i class="fa-solid fa-list-check"></i></div><div><p>Total Incidents</p><strong id="totalIncidents">0</strong><span>All reports</span></div><div class="sparkline"></div></article>
+        <article class="kpi-card amber"><div class="kpi-icon"><i class="fa-solid fa-person-running"></i></div><div><p>Active</p><strong id="activeIncidents">0</strong><span>Needs response</span></div><div class="sparkline"></div></article>
+        <article class="kpi-card red"><div class="kpi-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><div><p>Critical</p><strong id="criticalIncidents">0</strong><span>Highest severity</span></div><div class="sparkline"></div></article>
+        <article class="kpi-card green"><div class="kpi-icon"><i class="fa-solid fa-circle-check"></i></div><div><p>Resolved</p><strong id="resolvedIncidents">0</strong><span>Closed reports</span></div><div class="sparkline"></div></article>
+      </section>
+
+      <div class="dashboard-grid status-insights-grid">
+        <section class="panel chart-panel">
+          <h2>Incident by Category Chart</h2>
+          <div class="donut-row">
+            <div class="donut" id="categoryChart"><strong id="categoryChartTotal">0</strong><span>Total</span></div>
+            <div class="chart-list" id="categoryChartList"></div>
+          </div>
+        </section>
+        <section class="panel chart-panel">
+          <h2>Incident Status Chart</h2>
+          <div class="donut-row">
+            <div class="donut" id="statusChart"><strong id="statusChartTotal">0</strong><span>Total</span></div>
+            <div class="chart-list" id="statusChartList"></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="dashboard-grid status-insights-grid">
+        <section class="panel chart-panel">
+          <h2>Incident Severity Chart</h2>
+          <div class="chart-list" id="severityChartList"></div>
+        </section>
+        <section class="panel chart-panel">
+          <h2>Incident Trend Chart</h2>
+          <div class="chart-list" id="trendChartList"></div>
+        </section>
+      </div>
+
+      <section class="panel create-panel">
+        <div class="panel-header">
+          <h2>Incident Registry</h2>
+          <div class="agency-filter-row">
+            <div class="search-box"><i class="fa-solid fa-search"></i><input id="incidentSearch" type="search" placeholder="Search ID, type, address, reporter" /></div>
+            <select id="typeFilter"><option value="">All Types</option></select>
+            <select id="statusFilter"><option value="">All Statuses</option></select>
+            <select id="severityFilter"><option value="">All Severity</option></select>
+            <select id="sortControl">
+              <option value="date_desc">Newest First</option>
+              <option value="date_asc">Oldest First</option>
+              <option value="severity_desc">Severity High-Low</option>
+              <option value="severity_asc">Severity Low-High</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Incident No.</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Barangay</th>
+                <th>Assigned Agency</th>
+                <th>Severity</th>
+                <th>Status</th>
+                <th>Reported</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="incidentsTable">
+              <tr><td colspan="9">Loading incidents...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-actions incident-pagination">
+          <button class="ghost-btn compact" id="prevPageBtn" type="button">Previous</button>
+          <span id="pageInfo">Page 1 of 1</span>
+          <button class="ghost-btn compact" id="nextPageBtn" type="button">Next</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="incidentModal" hidden>
+    <section class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="incidentModalTitle">
+      <button class="modal-close" id="closeIncidentModal" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      <div class="profile-modal-header">
+        <div class="agency-modal-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div>
+          <h2 id="incidentModalTitle">Incident Details</h2>
+          <p id="incidentModalSubtitle">Reported incident information</p>
+        </div>
+      </div>
+      <div class="profile-detail-grid" id="incidentDetails"></div>
+      <div class="agency-personnel-panel">
+        <h3>Assignment</h3>
+        <div class="assignment-tools-grid" id="incidentAssignmentPanel"></div>
+      </div>
+      <div class="agency-personnel-panel">
+        <h3>Media</h3>
+        <div class="agency-personnel-list" id="incidentMedia"></div>
+      </div>
+      <div class="agency-personnel-panel">
+        <h3>Assignment History</h3>
+        <div class="agency-personnel-list" id="incidentAssignmentHistory"></div>
+      </div>
+      <div class="agency-personnel-panel">
+        <h3>Timeline History</h3>
+        <div class="agency-personnel-list" id="incidentTimeline"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/admin-incidents.js"></script>
+</body>
+</html>

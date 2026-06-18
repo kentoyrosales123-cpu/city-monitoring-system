@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Report Incident | UrbanRisk AI</title>
+  <link rel="stylesheet" href="/css/responder-dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <div class="responder-shell report-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+        <div><span>Responder System</span></div>
+      </div>
+
+      <section class="profile-card">
+        <div class="avatar" id="responderAvatar"><i class="fa-solid fa-user"></i></div>
+        <div>
+          <strong id="responderName">Responder</strong>
+          <span id="responderRole">Field Responder</span>
+          <em><i></i>On Duty</em>
+        </div>
+      </section>
+
+      <nav class="side-nav" aria-label="Responder navigation">
+        <small>Navigation</small>
+        <a href="/responder-dashboard.html"><i class="fa-solid fa-house"></i>Dashboard</a>
+        <a class="active" href="/report-incident.html"><i class="fa-regular fa-clipboard"></i>Report Incident</a>
+        <a href="/responder-dashboard.html#incidents"><i class="fa-solid fa-triangle-exclamation"></i>Active Incidents</a>
+        <a href="/responder-dashboard.html#location"><i class="fa-solid fa-crosshairs"></i>My Location</a>
+        <a href="/responder-dashboard.html#availability"><i class="fa-solid fa-user-clock"></i>Availability</a>
+        <button id="logoutBtn" type="button"><i class="fa-solid fa-power-off"></i>Logout</button>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="title-row">
+          <h1>Report Incident</h1>
+        </div>
+        <div class="top-actions">
+          <span class="online-pill"><i></i>Online</span>
+          <div class="top-profile">
+            <div class="small-avatar"><i class="fa-solid fa-user"></i></div>
+            <div>
+              <strong id="topResponderName">Responder</strong>
+              <span id="topResponderRole">Field Responder</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel report-incident-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Create Incident</h2>
+            <p id="incidentFormMessage">Submit verified field reports to the command center.</p>
+          </div>
+        </div>
+
+        <form id="incidentForm" class="incident-form">
+          <label>
+            <span>Category</span>
+            <select id="incidentCategory" required>
+              <option value="">Select Category</option>
+              <option value="public_safety">Public Safety</option>
+              <option value="fire_rescue">Fire & Rescue</option>
+              <option value="medical">Medical</option>
+              <option value="disaster">Disaster</option>
+              <option value="transportation">Transportation</option>
+              <option value="other">Others</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Incident Type</span>
+            <select id="incidentSubtype" required>
+              <option value="">Select Incident Type</option>
+            </select>
+          </label>
+
+          <label class="full">
+            <span>Description</span>
+            <textarea id="description" rows="5" placeholder="Describe what happened, urgency, hazards, and immediate needs." required></textarea>
+          </label>
+
+          <label class="full">
+            <span>Address</span>
+            <input id="address" type="text" placeholder="Street, landmark, barangay, or exact location" required />
+          </label>
+
+          <div class="location-grid full">
+            <label>
+              <span>Latitude</span>
+              <input id="latitude" type="number" step="any" placeholder="Latitude" required />
+            </label>
+            <label>
+              <span>Longitude</span>
+              <input id="longitude" type="number" step="any" placeholder="Longitude" required />
+            </label>
+            <button id="captureGpsBtn" class="capture-btn" type="button"><i class="fa-solid fa-location-crosshairs"></i>Capture GPS</button>
+          </div>
+
+          <label>
+            <span>Severity</span>
+            <select id="severity">
+              <option value="low">Low</option>
+              <option value="moderate" selected>Moderate</option>
+              <option value="high">High</option>
+              <option value="critical">Critical</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Photos</span>
+            <input id="photos" type="file" accept="image/*" multiple />
+          </label>
+
+          <label class="full">
+            <span>Evidence</span>
+            <input id="evidence" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" multiple />
+          </label>
+
+          <button class="submit-incident" type="submit"><i class="fa-solid fa-paper-plane"></i>Submit Incident</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="/js/report-incident.js"></script>
+</body>
+</html>

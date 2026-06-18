@@ -33,6 +33,7 @@ const workflowStatuses = [
   "assigned",
   "responding",
   "resolved",
+  "closed",
   "cancelled",
 ];
 
@@ -134,6 +135,75 @@ const incidentSchema = new mongoose.Schema(
       },
     ],
 
+    assignmentHistory: [
+      {
+        action: {
+          type: String,
+          enum: ["agency_assigned", "agency_reassigned", "responder_assigned", "responder_reassigned", "bulk_responder_assigned"],
+          required: true,
+        },
+        previousAgency: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Agency",
+          default: null,
+        },
+        nextAgency: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Agency",
+          default: null,
+        },
+        previousResponders: [{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        }],
+        nextResponders: [{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        }],
+        assignedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          default: null,
+        },
+        assignedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+
+    assignmentNotifications: [
+      {
+        targetType: {
+          type: String,
+          enum: ["agency", "responder"],
+          required: true,
+        },
+        target: {
+          type: mongoose.Schema.Types.ObjectId,
+          refPath: "assignmentNotifications.targetModel",
+        },
+        targetModel: {
+          type: String,
+          enum: ["Agency", "User"],
+          required: true,
+        },
+        eventType: {
+          type: String,
+          enum: ["assigned", "reassigned"],
+          required: true,
+        },
+        message: {
+          type: String,
+          default: "",
+        },
+        notifiedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+
     status: {
       type: String,
       enum: workflowStatuses,
@@ -153,6 +223,26 @@ const incidentSchema = new mongoose.Schema(
     resolvedAt: {
       type: Date,
       default: null,
+    },
+
+    closedAt: {
+      type: Date,
+      default: null,
+    },
+
+    resolutionNotes: {
+      type: String,
+      default: "",
+    },
+
+    resolutionEvidence: {
+      type: [String],
+      default: [],
+    },
+
+    resolutionReport: {
+      type: String,
+      default: "",
     },
 
     timeline: [
@@ -196,6 +286,10 @@ incidentSchema.pre("validate", function setIncidentNumber(next) {
 
   if (this.status === "resolved" && !this.resolvedAt) {
     this.resolvedAt = new Date();
+  }
+
+  if (this.status === "closed" && !this.closedAt) {
+    this.closedAt = new Date();
   }
 
   if (!this.timeline?.length) {

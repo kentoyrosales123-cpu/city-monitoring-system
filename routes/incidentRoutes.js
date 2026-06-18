@@ -4,7 +4,9 @@ const {
   createIncident,
   getIncidents,
   getIncidentById,
+  updateIncident,
   updateIncidentStatus,
+  assignIncident,
   deleteIncident,
 } = require("../controllers/incidentController");
 
@@ -26,6 +28,20 @@ router.get(
   protect,
   authorize("admin", "commander", "police", "fire", "medical", "drrm", "barangay"),
   getIncidentById
+);
+
+router.put(
+  "/:id",
+  protect,
+  authorize("admin", "commander"),
+  updateIncident
+);
+
+router.put(
+  "/:id/assign",
+  protect,
+  authorize("admin", "commander"),
+  assignIncident
 );
 
 router.put(

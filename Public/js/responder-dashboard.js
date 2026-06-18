@@ -400,6 +400,10 @@ els.statusButtons.forEach((button) => {
   });
 });
 
+document.querySelector('[data-action="report-incident"]')?.addEventListener("click", () => {
+  window.location.href = "/report-incident.html";
+});
+
 const socket = io();
 socket.emit("registerUser", user.id || user._id);
 
